@@ -109,3 +109,23 @@ k3d registry create registry.localhost --port 5500
 docker network connect k3d k3d-registry.localhost
 
 ```
+
+## Clone pizza-labs
+
+```bash
+
+# clone pizza-labs
+### change bartr to your branch
+cd $HOME
+
+git clone https://github.com/cse-labs/pizza-labs
+cd pizza-labs
+git checkout bartr
+git pull
+git clone https://github.com/cse-labs/pizza-labs .gitops
+cd .gitops
+git checkout labs --
+git pull
+cd $HOME
+
+```
