@@ -83,7 +83,7 @@ echo "https://$(git config user.name):$PAT@github.com" > $HOME/.git-credentials
 ```bash
 
 # clone pizza-labs
-### change bartr to your branch
+### some of the WSL changes are only in the bartr branch
 cd $HOME
 
 git clone https://github.com/cse-labs/pizza-labs
