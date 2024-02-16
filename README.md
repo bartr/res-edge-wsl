@@ -121,7 +121,8 @@ sudo ./install.sh
 ## Finish Setup
 
 - `exit` the WSL shell
-- Restart the WSL shell with `wsl`
+- Restart the WSL shell with `wsl -- code ~`
+- Use "ctl `" to open a terminal
 
 ```bash
 
@@ -132,16 +133,6 @@ kubectl completion zsh > "$HOME/.oh-my-zsh/completions/_kubectl"
 k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
 kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
 compinit
-
-```
-
-## Install Local Container Registry
-
-```bash
-
-docker network create k3d
-k3d registry create registry.localhost --port 5500
-docker network connect k3d k3d-registry.localhost
 
 ```
 
@@ -158,7 +149,7 @@ kic cluster create
 
 ```
 
-## Test Cluster
+## Test the Cluster
 
 ```bash
 
@@ -168,5 +159,21 @@ http localhost/heartbeat/16
 
 ```
 
-- Using your browser, go to <http://localhost> and <http://locahost/heartbeat/16>
+- Using your browser, go to <http://localhost> and <http://localhost/heartbeat/16>
 - Use <https://res-edge.com> to deploy / undeploy Namespaces to `/m/type/lab`
+
+## Stop the WSL Instance
+
+```bash
+
+wsl -t ubuntu
+
+```
+
+## Destroy the WSL Instance
+
+```bash
+
+wsl --unregister ubuntu
+
+```
