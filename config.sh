@@ -62,6 +62,30 @@ chmod +x "$HOME/bin/sql"
 } > $HOME/bin/path
 chmod +x $HOME/bin/path
 
+tag=$(curl -s https://api.github.com/repos/cse-labs/res-edge-labs/releases/latest | grep tag_name | cut -d '"' -f4)
+
+# install kic
+wget -O kic.tar.gz "https://github.com/cse-labs/res-edge-labs/releases/download/$tag/kic-$tag-linux-amd64.tar.gz"
+tar -xvzf kic.tar.gz -C /$HOME/bin
+rm kic.tar.gz
+
+# install ds
+wget -O ds.tar.gz "https://github.com/cse-labs/res-edge-labs/releases/download/$tag/ds-$tag-linux-amd64.tar.gz"
+tar -xvzf ds.tar.gz -C /$HOME/bin
+rm ds.tar.gz
+
+git config --global core.whitespace blank-at-eol,blank-at-eof,space-before-tab
+git config --global pull.rebase false
+git config --global init.defaultbranch main
+git config --global fetch.prune true
+git config --global core.pager more
+git config --global diff.colorMoved zebra
+git config --global devcontainers-theme.show-dirty 1
+git config --global core.editor "nano -w"
+
+dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.22
+dotnet tool install --global webvalidate
+
 # install oh my zsh
 bash -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
@@ -77,45 +101,3 @@ bash -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
     echo ""
     echo "compinit"
 } >> $HOME/.zshrc
-
-
-git config --global core.whitespace blank-at-eol,blank-at-eof,space-before-tab
-git config --global pull.rebase false
-git config --global init.defaultbranch main
-git config --global fetch.prune true
-git config --global core.pager more
-git config --global diff.colorMoved zebra
-git config --global devcontainers-theme.show-dirty 1
-git config --global core.editor "nano -w"
-git config --global credential.helper store
-
-mkdir -p "$HOME/.oh-my-zsh/completions"
-kic completion zsh > "$HOME/.oh-my-zsh/completions/_kic"
-ds completion zsh > "$HOME/.oh-my-zsh/completions/_ds"
-kubectl completion zsh > "$HOME/.oh-my-zsh/completions/_kubectl"
-k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
-kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
-#gh completion -s zsh > ~/.oh-my-zsh/completions/_gh
-# argocd completion zsh > "$HOME/.oh-my-zsh/completions/_argocd"
-# vcluster completion zsh > "$HOME/.oh-my-zsh/completions/_vcluster"
-compinit
-
-dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.1.22
-dotnet tool install --global webvalidate
-
-docker network create k3d
-k3d registry create registry.localhost --port 5500
-docker network connect k3d k3d-registry.localhost
-
-exit
-
-### exit from WSL terminal
-### run wsl --code ~
-
-# edit and save .zshenv
-code $HOME/.zshenv
-
-# change these and run
-source $HOME/.zshenv
-git config --global user.name bartr
-git config --global user.email bartr@microsoft.com

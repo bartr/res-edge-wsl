@@ -14,14 +14,25 @@
 - `wsl --install ubuntu`
 - Enter your user name and password
 
-## Clone this repo
+## Update IP Tables
 
 ```bash
 
-cd $HOME
+clear
+echo "choose Legacy IP Tables"
+echo ""
 
-git clone https://github.com/bartr/res-edge-wsl wsl
-cd wsl
+sudo update-alternatives --config iptables
+
+```
+
+## Set root password
+
+```bash
+
+echo ""
+echo "set the root password"
+sudo passwd
 
 ```
 
@@ -31,6 +42,28 @@ cd wsl
 
 # your PAT should have access to the GitOps repo Res-Edge uses
 export PAT=MyGitHubPat
+
+```
+
+## Set git config
+
+- change the values
+
+```bash
+
+git config --global user.name bartr
+git config --global user.email bartr@microsoft.com
+
+```
+
+## Clone this repo
+
+```bash
+
+cd $HOME
+
+git clone https://github.com/bartr/res-edge-wsl wsl
+cd wsl
 
 ```
 
@@ -47,5 +80,32 @@ sudo ./install.sh
 ```bash
 
 ./config.sh
+
+```
+
+## Finish Setup
+
+- `exit` the WSL shell
+- Restart the WSL shell with `wsl`
+
+```bash
+
+mkdir -p "$HOME/.oh-my-zsh/completions"
+kic completion zsh > "$HOME/.oh-my-zsh/completions/_kic"
+ds completion zsh > "$HOME/.oh-my-zsh/completions/_ds"
+kubectl completion zsh > "$HOME/.oh-my-zsh/completions/_kubectl"
+k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
+kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
+compinit
+
+```
+
+## Install Local Container Registry
+
+```bash
+
+docker network create k3d
+k3d registry create registry.localhost --port 5500
+docker network connect k3d k3d-registry.localhost
 
 ```

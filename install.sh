@@ -15,10 +15,10 @@ chsh $SUDO_USER -s /bin/zsh
 
 # create / add to groups
 groupadd docker
-usermod -aG sudo ${ME}
-usermod -aG admin ${ME}
-usermod -aG docker ${ME}
-gpasswd -a ${ME} sudo
+usermod -aG sudo $SUDO_USER
+usermod -aG admin $SUDO_USER
+usermod -aG docker $SUDO_USER
+gpasswd -a $SUDO_USER sudo
 
 # add Docker repo
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -36,22 +36,10 @@ wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG
 # install flux
 curl -s https://fluxcd.io/install.sh | bash
 
-tag=$(curl -s https://api.github.com/repos/cse-labs/res-edge-labs/releases/latest | grep tag_name | cut -d '"' -f4)
-
-# install kic
-wget -O kic.tar.gz "https://github.com/cse-labs/res-edge-labs/releases/download/$tag/kic-$tag-linux-amd64.tar.gz"
-tar -xvzf kic.tar.gz -C /home/$ME/bin
-rm kic.tar.gz
-
-# install ds
-wget -O ds.tar.gz "https://github.com/cse-labs/res-edge-labs/releases/download/$tag/ds-$tag-linux-amd64.tar.gz"
-tar -xvzf ds.tar.gz -C /home/$ME/bin
-rm ds.tar.gz
-
 VERSION=$(curl -i https://github.com/derailed/k9s/releases/latest | grep "location: https://github.com/" | rev | cut -f 1 -d / | rev | sed 's/\r//')
 wget https://github.com/derailed/k9s/releases/download/$VERSION/k9s_Linux_amd64.tar.gz
 tar -zxvf k9s_Linux_amd64.tar.gz -C /usr/local/bin
-rm -f k9s_Linux_x86_64.tar.gz
+rm -f k9s_Linux_amd64.tar.gz
 
 # install jp (jmespath)
 VERSION=$(curl -i https://github.com/jmespath/jp/releases/latest | grep "location: https://github.com/" | rev | cut -f 1 -d / | rev | sed 's/\r//')
@@ -75,7 +63,9 @@ cd $OLD_PWD
 #apt-get install -y gh
 
 # change ownership of home directory
-chown -R ${ME}:${ME} /home/${ME}
+chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER
 
 # update wsl.conf
 printf "\n[user]\ndefault=$SUDO_USER\n" >> /etc/wsl.conf
+
+service docker start
