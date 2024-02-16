@@ -48,10 +48,13 @@ chmod +x "$HOME/bin/sql"
     echo "alias kl='kubectl logs'"
     echo "alias kak='kubectl apply -k'"
     echo "alias kuse='kubectl config use-context'"
+    echo "alias ipconfig='ip -4 a show eth0 | grep inet | sed \"s/inet//g\" | sed \"s/ //g\" | cut -d / -f 1'"
     echo ""
 
     echo "export GO111MODULE=on"
-    echo "alias ipconfig='ip -4 a show eth0 | grep inet | sed \"s/inet//g\" | sed \"s/ //g\" | cut -d / -f 1'"
+    echo "export KIC_BASE=$HOME/pizza-labs"
+    echo "export KIC_REPO_FULL=https://github.com/cse-labs/pizza-labs"
+    echo "export KIC_BRANCH=bartr"
 } > $HOME/.zshenv
 
 {
