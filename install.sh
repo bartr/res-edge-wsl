@@ -2,8 +2,15 @@
 
 echo "$SUDO_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$SUDO_USER
 
+# create / add to groups
+groupadd docker
+usermod -aG sudo $SUDO_USER
+usermod -aG admin $SUDO_USER
+usermod -aG docker $SUDO_USER
+gpasswd -a $SUDO_USER sudo
+
 apt-get update
-apt upgrade -y
+apt-get upgrade -y
 
 # Get Ubuntu version
 #declare repo_version=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
@@ -18,9 +25,22 @@ apt upgrade -y
 #rm packages-microsoft-prod.deb
 
 # Update packages
-#apt update
+#apt-get update
 
-apt-get install -y curl git wget nano zsh
+
+# add Docker repo
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+
+# add sql tools repo
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/msprod.list
+
+# add gh cli repo
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+apt-add-repository https://cli.github.com/packages
+
+apt-get update
 
 apt-get install -y curl git wget nano zsh
 apt-get install -y jq zip unzip httpie dnsutils
@@ -28,18 +48,9 @@ apt-get install -y apt-utils dialog apt-transport-https ca-certificates curl sof
 apt-get install -y apt-transport-https ca-certificates curl software-properties-common libssl-dev libffi-dev python2-dev build-essential cifs-utils git wget nano lsb-release jq gnupg-agent
 apt-get install -y dotnet-sdk-7.0 golang
 
-# create / add to groups
-groupadd docker
-usermod -aG sudo $SUDO_USER
-usermod -aG admin $SUDO_USER
-usermod -aG docker $SUDO_USER
-gpasswd -a $SUDO_USER sudo
-
-# add Docker repo
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-apt update
 apt-get install -y docker-ce docker-ce-cli containerd.io
+ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
+apt-get install -y gh
 
 # install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -63,19 +74,9 @@ chmod +x /usr/local/bin/jp
 
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/msprod.list
-apt-get update
-ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
-
 cd /usr/local/bin
 curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 cd $OLD_PWD
-
-#apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-#apt-add-repository https://cli.github.com/packages
-#apt-get update
-#apt-get install -y gh
 
 # change ownership of home directory
 chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER

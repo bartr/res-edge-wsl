@@ -57,14 +57,6 @@ chmod +x "$HOME/bin/sql"
     echo "export KIC_BRANCH=bartr"
 } > $HOME/.zshenv
 
-{
-    echo '#!/bin/bash'
-    echo ""
-    echo "# show friendly path"
-    echo 'echo "$PATH" | sed "s/:/\\n/g"'
-} > $HOME/bin/path
-chmod +x $HOME/bin/path
-
 tag=$(curl -s https://api.github.com/repos/cse-labs/res-edge-labs/releases/latest | grep tag_name | cut -d '"' -f4)
 
 # install kic
