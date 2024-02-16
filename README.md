@@ -186,6 +186,35 @@ sudo apt autoremove -y
 
 ```
 
+## Save the Image
+
+- Use WSL to save the image for reuse
+- Exit WSL into the Command Prompt
+- Change to the directory you want to store the file (3 - 8 GB)
+
+```bash
+
+# delete the cluster (optional)
+wsl -- kic cluster delete
+
+# stop the instance
+wsl -t ubuntu
+
+# export the image
+wsl --export ubuntu kic.tar
+
+# unregister ubuntu
+wsl --unregister ubuntu
+
+# import the image as "kic" - store in ./kic
+wsl --import kic kic kic.tar
+
+# start the image
+# run kic cluster create if you deleted the cluster
+wsl -- code ~
+
+```
+
 ## Stop the WSL Instance
 
 ```bash
