@@ -3,6 +3,22 @@
 echo "$SUDO_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$SUDO_USER
 
 apt-get update
+
+# Get Ubuntu version
+declare repo_version=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
+
+# Download Microsoft signing key and repository
+wget https://packages.microsoft.com/config/ubuntu/$repo_version/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+
+# Install Microsoft signing key and repository
+dpkg -i packages-microsoft-prod.deb
+
+# Clean up
+rm packages-microsoft-prod.deb
+
+# Update packages
+apt update
+
 apt-get install -y curl git wget nano zsh
 
 apt-get install -y curl git wget nano zsh
@@ -10,8 +26,6 @@ apt-get install -y jq zip unzip httpie dnsutils
 apt-get install -y apt-utils dialog apt-transport-https ca-certificates curl software-properties-common
 apt-get install -y apt-transport-https ca-certificates curl software-properties-common libssl-dev libffi-dev python2-dev build-essential cifs-utils git wget nano lsb-release jq gnupg-agent
 apt-get install -y dotnet-sdk-7.0 golang
-
-chsh $SUDO_USER -s /bin/zsh
 
 # create / add to groups
 groupadd docker
