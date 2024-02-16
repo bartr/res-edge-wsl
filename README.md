@@ -56,6 +56,15 @@ git config --global user.email bartr@microsoft.com
 
 ```
 
+## Set git-credentials
+
+```bash
+
+git config --global credential.helper store
+echo "https://$(git config user.name):$PAT@github.com" > $HOME/.git-credentials
+
+```
+
 ## Clone this repo
 
 ```bash
