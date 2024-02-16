@@ -8,15 +8,24 @@
 
 - From an elevated Command Prompt
   - You may have to run --update multiple times
-  - `wsl --update`
+
+    ```bash
+    wsl --update
+    ```
+
     - The most recent version of Windows Subsystem for Linux is already installed.
   - Set WSL to always use verion 2
-    - `wsl --set-default-version 2`
+
+    ```bash
+    wsl --set-default-version 2
+    ```
 
 ## Start Ubuntu in WSL
 
-- `wsl --install ubuntu`
 - Enter your user name and password
+  ```bash
+  wsl --install ubuntu
+  ```
 
 ## Update IP Tables
 
@@ -121,7 +130,12 @@ sudo ./install.sh
 ## Finish Setup
 
 - `exit` the WSL shell
-- Restart the WSL shell with `wsl -- code ~`
+- Restart the WSL shell 
+
+  ```bash
+  wsl -- code ~
+  ```
+
 - Use "ctl `" to open a terminal
 
 ```bash
@@ -161,6 +175,16 @@ http localhost/heartbeat/16
 
 - Using your browser, go to <http://localhost> and <http://localhost/heartbeat/16>
 - Use <https://res-edge.com> to deploy / undeploy Namespaces to `/m/type/lab`
+
+## Update ubuntu
+
+```bash
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt autoremove -y
+
+```
 
 ## Stop the WSL Instance
 
