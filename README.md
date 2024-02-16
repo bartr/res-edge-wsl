@@ -146,6 +146,7 @@ ds completion zsh > "$HOME/.oh-my-zsh/completions/_ds"
 kubectl completion zsh > "$HOME/.oh-my-zsh/completions/_kubectl"
 k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
 kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
+gh completion zsh > "$HOME/.oh-my-zsh/completions/_gh"
 compinit
 
 ```
