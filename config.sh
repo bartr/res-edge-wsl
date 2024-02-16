@@ -52,11 +52,6 @@ chmod +x "$HOME/bin/sql"
 
     echo "export GO111MODULE=on"
     echo "alias ipconfig='ip -4 a show eth0 | grep inet | sed \"s/inet//g\" | sed \"s/ //g\" | cut -d / -f 1'"
-    echo ""
-
-    echo "export KIC_BASE=$PWD"
-    echo "export KIC_REPO_FULL=$(git remote get-url --push origin)"
-    echo "export KIC_BRANCH=$(git branch --show-current)"
 } > $HOME/.zshenv
 
 {
@@ -65,9 +60,10 @@ chmod +x "$HOME/bin/sql"
     echo "# show friendly path"
     echo 'echo "$PATH" | sed "s/:/\\n/g"'
 } > $HOME/bin/path
+chmod +x $HOME/bin/path
 
 # install oh my zsh
-zsh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+bash -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # add to .zshrc
 {
@@ -75,7 +71,7 @@ zsh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tool
     echo 'cd $HOME'
     echo ""
     echo "# start a process so WSL doesn't exit"
-    echo "if ! ps -ef | grep "sleep infinity" | grep -v grep > /dev/null; then"
+    echo "if ! ps -ef | grep \"sleep infinity\" | grep -v grep > /dev/null; then"
     echo "    nohup sleep infinity >& \$HOME/nohup.out &"
     echo "fi"
     echo ""
