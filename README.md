@@ -1,5 +1,9 @@
 # Deploying Res-Edge on WSL
 
+- Read more about [Res-Edge](https://res-edge.com)
+- You need access to `pizza-labs` in order to complete this lab
+  - Ping `bartr@microsoft.com` if you think you should have access
+
 ## Install WSL (version 2)
 
 - From an elevated Command Prompt
@@ -65,6 +69,28 @@ echo "https://$(git config user.name):$PAT@github.com" > $HOME/.git-credentials
 
 ```
 
+## Clone pizza-labs
+
+```bash
+
+# clone pizza-labs
+### change bartr to your branch
+cd $HOME
+
+git clone https://github.com/cse-labs/pizza-labs
+cd pizza-labs
+git checkout bartr
+git pull
+cp -r .kic ..
+cp -r .ds ..
+git clone https://github.com/cse-labs/pizza-labs .gitops
+cd .gitops
+git checkout labs --
+git pull
+cd $HOME
+
+```
+
 ## Clone this repo
 
 ```bash
@@ -119,22 +145,28 @@ docker network connect k3d k3d-registry.localhost
 
 ```
 
-## Clone pizza-labs
+## Create a Cluster
+
+- This will create the k3d cluster
+- It will also install Flux and configure as `lab-01`
 
 ```bash
 
-# clone pizza-labs
-### change bartr to your branch
-cd $HOME
+cd $HOME/pizza-labs
 
-git clone https://github.com/cse-labs/pizza-labs
-cd pizza-labs
-git checkout bartr
-git pull
-git clone https://github.com/cse-labs/pizza-labs .gitops
-cd .gitops
-git checkout labs --
-git pull
-cd $HOME
+kic cluster create
 
 ```
+
+## Test Cluster
+
+```bash
+
+http localhost
+
+http localhost/heartbeat/16
+
+```
+
+- Using your browser, go to <http://localhost> and <http://locahost/heartbeat/16>
+- Use <https://res-edge.com> to deploy / undeploy Namespaces to `/m/type/lab`
