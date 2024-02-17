@@ -37,6 +37,9 @@ apt-get install -y docker-ce docker-ce-cli containerd.io
 ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
 apt-get install -y gh
 
+# fix dotnet install issue
+cp -r /usr/share/dotnet/* /usr/lib/dotnet/
+
 # install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
