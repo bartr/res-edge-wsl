@@ -34,7 +34,7 @@ apt-get install -y apt-transport-https ca-certificates curl software-properties-
 apt-get install -y dotnet-sdk-7.0 golang
 
 apt-get install -y docker-ce docker-ce-cli containerd.io
-# ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
+ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
 # apt-get install -y gh
 
 # install kubectl
