@@ -12,34 +12,18 @@ gpasswd -a $SUDO_USER sudo
 apt-get update
 apt-get upgrade -y
 
-# Get Ubuntu version
-#declare repo_version=$(if command -v lsb_release &> /dev/null; then lsb_release -r -s; else grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"'; fi)
-
-# Download Microsoft signing key and repository
-#wget https://packages.microsoft.com/config/ubuntu/$repo_version/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-
-# Install Microsoft signing key and repository
-#dpkg -i packages-microsoft-prod.deb
-
-# Clean up
-#rm packages-microsoft-prod.deb
-
-# Update packages
-#apt-get update
-
-
 # add Docker repo
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
 # add sql tools repo
-curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/msprod.list
+# curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+# curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list > /etc/apt/sources.list.d/msprod.list
 
 # add gh cli repo
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
+# curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+# chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+# echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list
 
 apt-get update
 
@@ -50,8 +34,8 @@ apt-get install -y apt-transport-https ca-certificates curl software-properties-
 apt-get install -y dotnet-sdk-7.0 golang
 
 apt-get install -y docker-ce docker-ce-cli containerd.io
-ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
-apt-get install -y gh
+# ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
+# apt-get install -y gh
 
 # install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
