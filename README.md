@@ -23,15 +23,23 @@
 ## Start Ubuntu in WSL
 
 - Enter your user name and password
+  - Using the same user name as Windows will make things easier
+
   ```bash
+
+  set USERNAME
+
   wsl --install ubuntu
+
   ```
 
 ## Update IP Tables
 
+- Once WSL starts, you will be in a bash prompt inside your Ubuntu VM
+- You will have to enter you're password the first time you run `sudo`
+
 ```bash
 
-clear
 echo "choose Legacy IP Tables"
 echo ""
 
@@ -40,6 +48,8 @@ sudo update-alternatives --config iptables
 ```
 
 ## Set root password
+
+- Set the `root` password to something you can remember - in case you need it
 
 ```bash
 
@@ -51,16 +61,19 @@ sudo passwd
 
 ## Set environment variables
 
+- Your PAT should have access to the GitOps repo Res-Edge uses
+
+> Do NOT check your PAT into GitHub!!!
+
 ```bash
 
-# your PAT should have access to the GitOps repo Res-Edge uses
 export PAT=MyGitHubPat
 
 ```
 
 ## Set git config
 
-- change the values
+- Change the values
 
 ```bash
 
@@ -115,22 +128,46 @@ cd wsl
 
 ```bash
 
+# install tools
 sudo ./install.sh
+
+# Configure User
+./config.sh
 
 ```
 
-## Configure User
+## AKS EE Client Setup
+
+- If you are using this image as a bash shell to manage AKS EE, you have to complete these steps
+
+### Update vSwitch
+- This step allows the vSwitches to communicate
+- If you used a differnt vSwitch, change before running
+- From an elevated PowerShell (on the Windows host) prompt
+
+```powershel
+
+Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.InterfaceAlias -eq 'vEthernet (aksedgesw-int)'} | Set-NetIPInterface -Forwarding Enabled -Verbose
+
+```
+
+### Copy Kubectl Config
+
+- From your WSL SSH session
+- You may have to update the path
 
 ```bash
 
-./config.sh
+cd $HOME
+mkdir -p .kube
+cp /mnt/c/Users/$USER/.kube/config .kube
 
 ```
 
 ## Finish Setup
 
 - `exit` the WSL shell
-- Restart the WSL shell 
+- Restart the WSL shell
 
   ```bash
   wsl -- code ~
@@ -147,7 +184,18 @@ kubectl completion zsh > "$HOME/.oh-my-zsh/completions/_kubectl"
 k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
 kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
 gh completion zsh > "$HOME/.oh-my-zsh/completions/_gh"
+flux completion zsh > "$HOME/.oh-my-zsh/completions/_flux"
 compinit
+
+```
+
+## Check AKS EE Cluster
+
+- This will only work if you setup the AKS EE cluster
+
+```bash
+
+kic pods
 
 ```
 
@@ -177,17 +225,7 @@ http localhost/heartbeat/16
 - Using your browser, go to <http://localhost> and <http://localhost/heartbeat/16>
 - Use <https://res-edge.com> to deploy / undeploy Namespaces to `/m/type/lab`
 
-## Update ubuntu
-
-```bash
-
-sudo apt update
-sudo apt upgrade -y
-sudo apt autoremove -y
-
-```
-
-## Save the Image
+## Save the Image (optional)
 
 - Use WSL to save the image for reuse
 - Exit WSL into the Command Prompt
@@ -212,6 +250,7 @@ wsl --import kic kic kic.tar
 
 # start the image
 # run kic cluster create if you deleted the cluster
+# copy the AKS EE .kube/config file if running as client
 wsl -- code ~
 
 ```
