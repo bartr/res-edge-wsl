@@ -20,6 +20,42 @@
     wsl --set-default-version 2
     ```
 
+## Install AKS Edge Essentials (optional)
+
+- Download, save, and run .msi <https://aka.ms/aks-edge/k3s-msi>
+- From a PowerShell Admin terminal
+  - Change to the directory you want to save your config file
+
+```powershell
+
+# check install
+Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+Import-Module AksEdge
+Get-Command -Module AKSEdge | Format-Table Name, Version
+
+# check device settings
+Install-AksEdgeHostFeatures
+
+# create single machine config
+New-AksEdgeConfig -DeploymentType SingleMachineCluster -outFile .\single-config.json | Out-Null
+
+# create AKS EE from config
+New-AksEdgeDeployment -JsonConfigFilePath .\single-config.json
+
+# check K8s
+kubectl get pods -A
+
+# check network
+Get-VMNetworkAdapter -All
+Get-VMSwitch
+Get-NetIPInterface
+
+# route WSL network to AKS EE network
+# you may need to update the interface names
+Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.InterfaceAlias -eq 'vEthernet (aksedgesw-int)'} | Set-NetIPInterface -Forwarding Enabled -Verbose
+
+```
+
 ## Start Ubuntu in WSL
 
 - Enter your user name and password
