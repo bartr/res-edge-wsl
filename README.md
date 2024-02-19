@@ -160,7 +160,9 @@ Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.Inter
 
 cd $HOME
 mkdir -p .kube
-cp /mnt/c/Users/$USER/.kube/config .kube
+# we set KUBECONFIG to $HOME/.kube and /mnt/c/Users/$USER/.kube
+# you may have to update paths in $HOME/.zshenv
+# cp /mnt/c/Users/$USER/.kube/config .kube
 
 ```
 

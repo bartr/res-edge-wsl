@@ -52,9 +52,10 @@ chmod +x "$HOME/bin/sql"
     echo ""
 
     echo "export GO111MODULE=on"
-    echo "export KIC_BASE=$HOME/pizza-labs"
+    echo "export KIC_BASE=\$HOME/pizza-labs"
     echo "export KIC_REPO_FULL=https://github.com/cse-labs/pizza-labs"
     echo "export KIC_BRANCH=bartr"
+    echo "export KUBECONFIG=\$HOME/.kube/config:/mnt/c/Users/\$USER/.kube/config"
 } > $HOME/.zshenv
 
 tag=$(curl -s https://api.github.com/repos/cse-labs/res-edge-labs/releases/latest | grep tag_name | cut -d '"' -f4)
