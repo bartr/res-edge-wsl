@@ -55,7 +55,7 @@ chmod +x "$HOME/bin/sql"
     echo "export KIC_BASE=\$HOME/pizza-labs"
     echo "export KIC_REPO_FULL=https://github.com/cse-labs/pizza-labs"
     echo "export KIC_BRANCH=bartr"
-    echo "export KUBECONFIG=\$HOME/.kube/config:/mnt/c/Users/\$USER/.kube/config"
+    echo "export KUBECONFIG=/mnt/c/Users/$USER/.kube/config"
 } > $HOME/.zshenv
 
 tag=$(curl -s https://api.github.com/repos/cse-labs/res-edge-labs/releases/latest | grep tag_name | cut -d '"' -f4)
@@ -88,8 +88,17 @@ bash -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 # add to .zshrc
 {
     echo ""
-    echo 'cd $HOME'
+    echo 'cd $KIC_BASE'
     echo ""
+
+    echo 'PROMPT="%{$fg[blue]%}%~%{$reset_color%}"'
+    echo "PROMPT+=' $(git_prompt_info)'"
+    echo 'ZSH_THEME_GIT_PROMPT_PREFIX="%{(%{$fg[red]%}"'
+    echo 'ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "'
+    echo 'ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}%1{?%}"'
+    echo 'ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"'
+    echo ""
+
     echo "# start a process so WSL doesn't exit"
     echo "if ! ps -ef | grep \"sleep infinity\" | grep -v grep > /dev/null; then"
     echo "    nohup sleep infinity >& \$HOME/nohup.out &"
