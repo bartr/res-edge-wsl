@@ -23,7 +23,7 @@ mkdir -p $HOME/.k9s
 chmod +x "$HOME/bin/sql"
 
 {
-    echo 'cd $HOME'
+    echo 'cd $KIC_BASE'
     echo ""
 
     echo 'hsort() { read -r; printf "%s\\n" "$REPLY"; sort }'
@@ -100,9 +100,10 @@ bash -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
     echo ""
 
     echo "# start a process so WSL doesn't exit"
-    echo "if ! ps -ef | grep \"sleep infinity\" | grep -v grep > /dev/null; then"
-    echo "    nohup sleep infinity >& \$HOME/nohup.out &"
-    echo "fi"
+    echo "#if ! ps -ef | grep \"sleep infinity\" | grep -v grep > /dev/null; then"
+    echo "#    nohup sleep infinity >& \$HOME/nohup.out &"
+    echo "#fi"
     echo ""
+
     echo "compinit"
 } >> $HOME/.zshrc

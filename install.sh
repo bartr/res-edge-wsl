@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo "$SUDO_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$SUDO_USER
+echo "" >> /etc/hosts
+echo -e "192.168.0.4\tlab-01" >> /etc/hosts
 
 # create / add to groups
 groupadd docker
