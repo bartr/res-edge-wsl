@@ -223,6 +223,7 @@ k3d completion zsh > "$HOME/.oh-my-zsh/completions/_k3d"
 kustomize completion zsh > "$HOME/.oh-my-zsh/completions/_kustomize"
 gh completion zsh > "$HOME/.oh-my-zsh/completions/_gh"
 flux completion zsh > "$HOME/.oh-my-zsh/completions/_flux"
+helm completion zsh > "$HOME/.oh-my-zsh/completions/_helm"
 compinit
 
 ```
