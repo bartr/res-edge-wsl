@@ -23,6 +23,9 @@ mkdir -p $HOME/.k9s
 chmod +x "$HOME/bin/sql"
 
 {
+    echo ""
+    echo 'cd $HOME'
+
     echo 'hsort() { read -r; printf "%s\\n" "$REPLY"; sort }'
     echo ""
 
@@ -84,16 +87,6 @@ bash -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 # add to .zshrc
 {
-    echo ""
-    echo 'cd $HOME'
-    echo ""
-
-    echo 'PROMPT="%{$fg[blue]%}%~%{$reset_color%}"'
-    echo "PROMPT+=' $(git_prompt_info)'"
-    echo 'ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(%{$fg[red]%}"'
-    echo 'ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "'
-    echo 'ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[red]%}%1{✗%}"'
-    echo 'ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"'
     echo ""
 
     echo "# start a process so WSL doesn't exit"
