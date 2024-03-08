@@ -1,6 +1,9 @@
 #!/bin/bash
 
+# no password for sudo
 echo "$SUDO_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$SUDO_USER
+
+# add lab-01 to hosts
 echo "" >> /etc/hosts
 echo -e "192.168.0.4\tlab-01" >> /etc/hosts
 
@@ -29,14 +32,15 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githu
 
 apt-get update
 
+export ACCEPT_EULA=y
+
+apt-get install -y apt-utils dialog apt-transport-https ca-certificates software-properties-common
+apt-get install -y libssl-dev libffi-dev python2-dev build-essential cifs-utils lsb-release gnupg-agent
 apt-get install -y curl git wget nano zsh
 apt-get install -y jq zip unzip httpie dnsutils
-apt-get install -y apt-utils dialog apt-transport-https ca-certificates curl software-properties-common
-apt-get install -y apt-transport-https ca-certificates curl software-properties-common libssl-dev libffi-dev python2-dev build-essential cifs-utils git wget nano lsb-release jq gnupg-agent
 apt-get install -y dotnet-sdk-7.0 golang
-
 apt-get install -y docker-ce docker-ce-cli containerd.io
-ACCEPT_EULA=y apt-get install -y mssql-tools unixodbc-dev
+apt-get install -y mssql-tools unixodbc-dev
 apt-get install -y gh
 
 # fix dotnet install issue
@@ -47,11 +51,13 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 rm -f kubectl
 
+# install k3d
 wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v5.4.6 bash
 
 # install flux
 curl -s https://fluxcd.io/install.sh | bash
 
+# install K9s
 VERSION=$(curl -i https://github.com/derailed/k9s/releases/latest | grep "location: https://github.com/" | rev | cut -f 1 -d / | rev | sed 's/\r//')
 wget https://github.com/derailed/k9s/releases/download/$VERSION/k9s_Linux_amd64.tar.gz
 tar -zxvf k9s_Linux_amd64.tar.gz -C /usr/local/bin
@@ -62,8 +68,10 @@ VERSION=$(curl -i https://github.com/jmespath/jp/releases/latest | grep "locatio
 wget https://github.com/jmespath/jp/releases/download/$VERSION/jp-linux-amd64 -O /usr/local/bin/jp
 chmod +x /usr/local/bin/jp
 
+# install helm
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
+# install Kustomize
 cd /usr/local/bin
 curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 cd $OLD_PWD
@@ -74,4 +82,5 @@ chown -R $SUDO_USER:$SUDO_USER /home/$SUDO_USER
 # update wsl.conf
 printf "\n[user]\ndefault=$SUDO_USER\n" >> /etc/wsl.conf
 
+# start the docker service
 service docker start
