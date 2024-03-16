@@ -1,5 +1,7 @@
 #!/bin/bash
 
+update-alternatives --set iptables /usr/sbin/iptables-legacy
+
 # no password for sudo
 echo "$SUDO_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$SUDO_USER
 
